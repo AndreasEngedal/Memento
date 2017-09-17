@@ -69,4 +69,12 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         mDelayedTransactionHandler.removeCallbacks(mRunnable);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mFragmentHandler.getFragmentManager().getBackStackEntryCount() != 0)
+            mFragmentHandler.getFragmentManager().popBackStack();
+        else
+            super.onBackPressed();
+    }
 }
