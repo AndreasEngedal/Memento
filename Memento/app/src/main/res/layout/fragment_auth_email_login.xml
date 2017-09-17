@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/auth_email_logo_imageview"
+        android:layout_marginTop="@dimen/auth_icon_top_margin"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/factions_circle"
+        android:transitionName="@string/transitionLogo" />
+
+    <Button
+        android:id="@+id/auth_email_top_button"
+        android:layout_width="@dimen/auth_button_width"
+        android:layout_height="@dimen/auth_button_size"
+        android:layout_marginTop="@dimen/auth_email_distance_between_logo_and_views"
+        android:layout_below="@id/auth_email_logo_imageview"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/auth_email_login_border"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:text="@string/auth_login_with_email"
+        android:textSize="@dimen/font_size_auth_buttons"
+        android:textColor="@color/colorWhite"
+        android:textAlignment="center"
+        android:transitionName="@string/transitionEmail" />
+
+    <EditText
+        android:id="@+id/auth_email_email_edittext"
+        android:layout_width="@dimen/auth_button_width"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/auth_email_top_button"
+        android:layout_marginTop="@dimen/auth_distance_between_buttons"
+        android:hint="@string/auth_email_hint_email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/auth_email_password_edittext"
+        android:layout_width="@dimen/auth_button_width"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/auth_email_email_edittext"
+        android:layout_marginTop="@dimen/auth_distance_between_buttons"
+        android:hint="@string/auth_email_hint_password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/auth_email_login_button"
+        android:layout_width="@dimen/auth_button_width"
+        android:layout_height="@dimen/auth_button_size"
+        android:layout_below="@id/auth_email_password_edittext"
+        android:layout_marginTop="@dimen/auth_distance_between_buttons"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/auth_email_login_border"
+        android:textAllCaps="false"
+        android:textSize="@dimen/font_size_auth_buttons"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
+        android:text="@string/auth_email_login" />
+
+    <Button
+        android:id="@+id/auth_email_create_account_button"
+        android:layout_width="@dimen/auth_button_width"
+        android:layout_height="@dimen/auth_button_size"
+        android:layout_below="@id/auth_email_login_button"
+        android:layout_marginTop="@dimen/auth_distance_between_buttons"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/auth_email_login_border"
+        android:textAllCaps="false"
+        android:textSize="@dimen/font_size_auth_buttons"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
+        android:text="@string/auth_email_create_account" />
+
+</RelativeLayout>

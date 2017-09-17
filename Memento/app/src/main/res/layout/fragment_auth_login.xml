@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/auth_login_logo_imageview"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/auth_icon_top_margin"
+        android:src="@drawable/factions_circle"
+        android:transitionName="@string/transitionLogo" />
+
+    <Button
+        android:id="@+id/auth_login_facebook_button"
+        android:layout_width="@dimen/auth_button_width"
+        android:layout_height="@dimen/auth_button_size"
+        android:layout_below="@id/auth_login_logo_imageview"
+        android:layout_marginTop="@dimen/auth_distance_between_logo_and_views"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/auth_facebook_login_border"
+        android:textAllCaps="false"
+        android:textSize="@dimen/font_size_auth_buttons"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
+        android:text="@string/auth_login_with_facebook" />
+
+    <Button
+        android:id="@+id/auth_login_google_button"
+        android:layout_width="@dimen/auth_button_width"
+        android:layout_height="@dimen/auth_button_size"
+        android:layout_below="@id/auth_login_facebook_button"
+        android:layout_marginTop="@dimen/auth_distance_between_buttons"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/auth_google_login_border"
+        android:textAllCaps="false"
+        android:textSize="@dimen/font_size_auth_buttons"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
+        android:text="@string/auth_login_with_google" />
+
+    <Button
+        android:id="@+id/auth_login_email_button"
+        android:layout_width="@dimen/auth_button_width"
+        android:layout_height="@dimen/auth_button_size"
+        android:layout_below="@id/auth_login_google_button"
+        android:layout_marginTop="@dimen/auth_distance_between_buttons"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/auth_email_login_border"
+        android:textAllCaps="false"
+        android:textSize="@dimen/font_size_auth_buttons"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
+        android:text="@string/auth_login_with_email"
+        android:transitionName="@string/transitionEmail" />
+
+    <TextView
+        android:id="@+id/auth_login_skip_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/auth_login_email_button"
+        android:layout_marginTop="@dimen/outer_box_margin"
+        android:layout_centerHorizontal="true"
+        android:textColor="@drawable/textview_button"
+        android:textStyle="italic"
+        android:text="@string/auth_skip_login"/>
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/auth_login_hidden_facebook_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:visibility="gone"/>
+
+</RelativeLayout>
