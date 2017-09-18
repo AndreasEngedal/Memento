@@ -18,5 +18,11 @@
     <string name="auth_email_hint_password">Password</string>
     <string name="auth_email_login">Log in</string>
     <string name="auth_email_create_account">Create account</string>
+    <string name="auth_no_email_entered">No email entered</string>
+    <string name="auth_no_password_entered">No password entered</string>
+    <string name="auth_no_email_or_password_entered">No password or password entered</string>
+    <string name="auth_wrong_input">Wrong Email or password. Try again!</string>
+    <string name="auth_something_went_wrong">Something went wrong. Please try again later!</string>
+    <string name="auth_incorrect_login">Incorrect email or password!</string>
 
 </resources>

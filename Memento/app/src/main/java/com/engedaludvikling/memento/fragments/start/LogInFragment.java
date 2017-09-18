@@ -95,6 +95,14 @@ public class LogInFragment extends BaseFragment implements GoogleApiClient.OnCon
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.disconnect();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        Log.i("DestroyTag", "Destroyed");
+    }
+
+    @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(getMainActivity(), "Google connection failed", Toast.LENGTH_SHORT).show();
     }
@@ -105,10 +113,12 @@ public class LogInFragment extends BaseFragment implements GoogleApiClient.OnCon
                 .requestEmail()
                 .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .enableAutoManage(LogInFragment.super.getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                    .enableAutoManage(LogInFragment.super.getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
     }
 
     private void initializeFacebookLoginHandler() {
@@ -186,14 +196,11 @@ public class LogInFragment extends BaseFragment implements GoogleApiClient.OnCon
     @Optional
     @OnClick(R.id.auth_login_email_button)
     void emailLogin() {
-        BaseFragment previousFragment = (BaseFragment) mFragmentHandler.getFragmentManager().findFragmentById(R.id.main_content_frame);
-        BaseFragment nextFragment = LogInEmailFragment.newInstance();
-
         ArrayList<View> sharedElements = new ArrayList<>();
         sharedElements.add(ButterKnife.findById(getMainActivity(), R.id.auth_login_logo_imageview));
         sharedElements.add(ButterKnife.findById(getMainActivity(), R.id.auth_login_email_button));
 
-        mFragmentHandler.startTransactionWithFading(getMainActivity(), previousFragment, nextFragment, sharedElements, true);
+        mFragmentHandler.startTransactionWithFastFading(LogInEmailFragment.newInstance(), sharedElements, false);
     }
 
     @Optional

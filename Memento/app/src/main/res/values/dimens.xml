@@ -6,12 +6,14 @@
     <!-- Auth -->
     <dimen name="auth_icon_top_margin">50dp</dimen>
     <dimen name="auth_button_size">56dp</dimen>
+    <dimen name="auth_small_button_size">48dp</dimen>
     <dimen name="auth_button_width">280dp</dimen>
     <dimen name="auth_distance_between_buttons">16dp</dimen>
+    <dimen name="auth_distance_between_button_and_edittext">24dp</dimen>
     <dimen name="auth_distance_between_logo_and_views">70dp</dimen>
     <dimen name="auth_email_distance_between_logo_and_views">40dp</dimen>
-    <!-- Font sizes -->
 
+    <!---     Font sizes     -->
     <!-- Auth -->
     <dimen name="font_size_auth_buttons">16sp</dimen>
 </resources>

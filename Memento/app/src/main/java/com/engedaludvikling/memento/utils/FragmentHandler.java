@@ -23,11 +23,15 @@ public class FragmentHandler {
 
     private static final long MOVE_DEFAULT_TIME = 1000;
     private static final long FADE_DEFAULT_TIME = 500;
+    private static final long MOVE_FAST_TIME = 700;
+    private static final long FADE_FAST_TIME = 300;
 
+    private MainActivity mMainActivity;
     private FragmentManager mFragmentManager;
 
     public FragmentHandler(MainActivity activity) {
-        mFragmentManager = activity.getSupportFragmentManager();
+        mMainActivity = activity;
+        mFragmentManager = mMainActivity.getSupportFragmentManager();
     }
 
     public FragmentManager getFragmentManager() {
@@ -38,8 +42,10 @@ public class FragmentHandler {
         mFragmentManager.beginTransaction().replace(R.id.main_content_frame, fragment).commit();
     }
 
-    public void startTransactionWithFading(Context context, BaseFragment previousFragment, BaseFragment nextFragment, ArrayList<View> sharedElements, boolean addToBackStack) {
+    public void startTransactionWithFading(Context context, BaseFragment nextFragment, ArrayList<View> sharedElements, boolean addToBackStack) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+
+        BaseFragment previousFragment = (BaseFragment) mFragmentManager.findFragmentById(R.id.main_content_frame);
 
         // 1. Exit for Previous Fragment
         Fade exitFade = new Fade();
@@ -63,6 +69,40 @@ public class FragmentHandler {
             fragmentTransaction.addSharedElement(element, element.getTransitionName());
 
         fragmentTransaction.replace(R.id.main_content_frame, nextFragment);
+
+        if (addToBackStack)
+            fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    public void startTransactionWithFastFading(BaseFragment newFragment, ArrayList<View> sharedElements, boolean addToBackStack) {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+
+        BaseFragment previousFragment = (BaseFragment) mFragmentManager.findFragmentById(R.id.main_content_frame);
+
+        // 1. Exit for Previous Fragment
+        Fade exitFade = new Fade();
+        exitFade.setDuration(FADE_FAST_TIME);
+        previousFragment.setExitTransition(exitFade);
+
+        // 2. Shared Elements Transition
+        TransitionSet enterTransitionSet = new TransitionSet();
+        enterTransitionSet.addTransition(TransitionInflater.from(mMainActivity).inflateTransition(android.R.transition.move));
+        enterTransitionSet.setDuration(MOVE_FAST_TIME);
+        enterTransitionSet.setStartDelay(FADE_FAST_TIME);
+        newFragment.setSharedElementEnterTransition(enterTransitionSet);
+
+        // 3. Enter Transition for New Fragment
+        Fade enterFade = new Fade();
+        enterFade.setStartDelay(MOVE_FAST_TIME + FADE_FAST_TIME);
+        enterFade.setDuration(FADE_FAST_TIME);
+        newFragment.setEnterTransition(enterFade);
+
+        for (View element : sharedElements)
+            fragmentTransaction.addSharedElement(element, element.getTransitionName());
+
+        fragmentTransaction.replace(R.id.main_content_frame, newFragment);
 
         if (addToBackStack)
             fragmentTransaction.addToBackStack(null);
