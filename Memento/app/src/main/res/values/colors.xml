@@ -10,6 +10,7 @@
     <color name="colorEmailGray">#525252</color>
     <color name="colorTextButtonDefault">#707070</color>
     <color name="colorTextButtonPressed">#acacac</color>
+    <color name="colorProgressDialog">#d94026</color>
 
     <!-- General -->
     <color name="colorWhite">#FFFFFF</color>

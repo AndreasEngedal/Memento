@@ -15,10 +15,6 @@ import com.engedaludvikling.memento.fragments.BaseFragment;
 
 import java.util.ArrayList;
 
-/**
- * Created by Andreas Engedal on 14-09-2017.
- */
-
 public class FragmentHandler {
 
     private static final long MOVE_DEFAULT_TIME = 1000;
@@ -38,11 +34,14 @@ public class FragmentHandler {
         return mFragmentManager;
     }
 
-    public void startTransactionWithoutBackStack(BaseFragment fragment) {
-        mFragmentManager.beginTransaction().replace(R.id.main_content_frame, fragment).commit();
+    public void startTransactionWithoutFading(BaseFragment fragment, boolean addToBackStack) {
+        if (addToBackStack)
+            mFragmentManager.beginTransaction().replace(R.id.main_content_frame, fragment).addToBackStack(null).commit();
+        else
+            mFragmentManager.beginTransaction().replace(R.id.main_content_frame, fragment).commit();
     }
 
-    public void startTransactionWithFading(Context context, BaseFragment nextFragment, ArrayList<View> sharedElements, boolean addToBackStack) {
+    public void startTransactionWithFading(BaseFragment nextFragment, ArrayList<View> sharedElements, boolean addToBackStack) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
         BaseFragment previousFragment = (BaseFragment) mFragmentManager.findFragmentById(R.id.main_content_frame);
@@ -54,7 +53,7 @@ public class FragmentHandler {
 
         // 2. Shared Elements Transition
         TransitionSet enterTransitionSet = new TransitionSet();
-        enterTransitionSet.addTransition(TransitionInflater.from(context).inflateTransition(android.R.transition.move));
+        enterTransitionSet.addTransition(TransitionInflater.from(mMainActivity).inflateTransition(android.R.transition.move));
         enterTransitionSet.setDuration(MOVE_DEFAULT_TIME);
         enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME);
         nextFragment.setSharedElementEnterTransition(enterTransitionSet);
@@ -69,6 +68,37 @@ public class FragmentHandler {
             fragmentTransaction.addSharedElement(element, element.getTransitionName());
 
         fragmentTransaction.replace(R.id.main_content_frame, nextFragment);
+
+        if (addToBackStack)
+            fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    public void startTransactionWithFastFading(BaseFragment newFragment, boolean addToBackStack) {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+
+        BaseFragment previousFragment = (BaseFragment) mFragmentManager.findFragmentById(R.id.main_content_frame);
+
+        // 1. Exit for Previous Fragment
+        Fade exitFade = new Fade();
+        exitFade.setDuration(FADE_FAST_TIME);
+        previousFragment.setExitTransition(exitFade);
+
+        // 2. Shared Elements Transition
+        TransitionSet enterTransitionSet = new TransitionSet();
+        enterTransitionSet.addTransition(TransitionInflater.from(mMainActivity).inflateTransition(android.R.transition.move));
+        enterTransitionSet.setDuration(MOVE_FAST_TIME);
+        enterTransitionSet.setStartDelay(FADE_FAST_TIME);
+        newFragment.setSharedElementEnterTransition(enterTransitionSet);
+
+        // 3. Enter Transition for New Fragment
+        Fade enterFade = new Fade();
+        enterFade.setStartDelay(MOVE_FAST_TIME + FADE_FAST_TIME);
+        enterFade.setDuration(FADE_FAST_TIME);
+        newFragment.setEnterTransition(enterFade);
+
+        fragmentTransaction.replace(R.id.main_content_frame, newFragment);
 
         if (addToBackStack)
             fragmentTransaction.addToBackStack(null);
@@ -99,8 +129,9 @@ public class FragmentHandler {
         enterFade.setDuration(FADE_FAST_TIME);
         newFragment.setEnterTransition(enterFade);
 
-        for (View element : sharedElements)
-            fragmentTransaction.addSharedElement(element, element.getTransitionName());
+        if (sharedElements.size() > 0)
+            for (View element : sharedElements)
+                fragmentTransaction.addSharedElement(element, element.getTransitionName());
 
         fragmentTransaction.replace(R.id.main_content_frame, newFragment);
 

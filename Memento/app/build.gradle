@@ -58,6 +58,9 @@ dependencies {
     // retrolambda
     compile 'me.tatarka:gradle-retrolambda:3.4.0'
     testCompile 'junit:junit:4.12'
+
+    // Toasty
+    compile 'com.github.GrenderG:Toasty:1.2.5'
 }
 
 apply plugin: 'com.google.gms.google-services'

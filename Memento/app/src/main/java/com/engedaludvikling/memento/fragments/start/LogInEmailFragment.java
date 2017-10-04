@@ -8,23 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.engedaludvikling.memento.R;
 import com.engedaludvikling.memento.fragments.BaseFragment;
+import com.engedaludvikling.memento.fragments.MainMenuFragment;
 import com.engedaludvikling.memento.utils.FirebaseAuthHandler;
 import com.engedaludvikling.memento.utils.FragmentHandler;
 import com.engedaludvikling.memento.utils.IOnBackPressedListener;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 public class LogInEmailFragment extends BaseFragment implements IOnBackPressedListener {
 
@@ -66,38 +65,51 @@ public class LogInEmailFragment extends BaseFragment implements IOnBackPressedLi
         sharedElements.add(ButterKnife.findById(getMainActivity(), R.id.auth_email_top_button));
         sharedElements.add(ButterKnife.findById(getMainActivity(), R.id.auth_email_logo_imageview));
 
-        mFragmentHandler.startTransactionWithFastFading(LogInFragment.newInstance(), sharedElements, false);
+        mFragmentHandler.startTransactionWithFastFading(new LogInFragment(), sharedElements, false);
     }
 
     private boolean isInputValid() {
         if (mEditTextEmail.getText().toString().equals("") && mEditTextPassword.getText().toString().equals("")) {
-            Snackbar.make(getView(), getString(R.string.auth_no_email_or_password_entered), Snackbar.LENGTH_SHORT);
+            Snackbar.make(getMainActivity().getCoordinatorLayout(), getString(R.string.auth_no_email_or_password_entered), Snackbar.LENGTH_SHORT).show();
             return false;
         } else if (mEditTextEmail.getText().toString().equals("")) {
-            Snackbar.make(getView(), getString(R.string.auth_no_email_entered), Snackbar.LENGTH_SHORT);
+            Snackbar.make(getMainActivity().getCoordinatorLayout(), getString(R.string.auth_no_email_entered), Snackbar.LENGTH_SHORT).show();
             return false;
         } else if (mEditTextPassword.getText().toString().equals("")) {
-            Snackbar.make(getView(), getString(R.string.auth_no_password_entered), Snackbar.LENGTH_SHORT);
+            Snackbar.make(getMainActivity().getCoordinatorLayout(), getString(R.string.auth_no_password_entered), Snackbar.LENGTH_SHORT).show();
             return false;
         }
 
         return true;
     }
 
+    private void onLoginFailed(String errorMessage) {
+        dismissProgressDialog();
+        Toasty.error(getContext(), errorMessage, Toast.LENGTH_LONG).show();
+    }
+
+    private void onLoginSuccess(String successMessage) {
+        dismissProgressDialog();
+        Toasty.success(getContext(), successMessage).show();
+
+        ArrayList<View> sharedElements = new ArrayList<>();
+        sharedElements.add(ButterKnife.findById(getMainActivity(), R.id.auth_email_logo_imageview));
+        mFragmentHandler.startTransactionWithFastFading(new MainMenuFragment(), sharedElements, false);
+    }
+
     @OnClick(R.id.auth_email_login_button)
     void login() {
         if (isInputValid()) {
+            showProgressDialog(getString(R.string.auth_progress_dialog_logging_in));
+
             mFirebaseAuthHandler.getFirebaseAuth()
                     .signInWithEmailAndPassword(mEditTextEmail.getText().toString(), mEditTextPassword.getText().toString())
                     .addOnCompleteListener(task -> {
                         task.addOnSuccessListener(authResult -> {
-                            ArrayList<View> sharedElements = new ArrayList<>();
-                            sharedElements.add(ButterKnife.findById(getMainActivity(), R.id.auth_email_logo_imageview));
-
-                            mFragmentHandler.startTransactionWithFastFading(LogInFragment.newInstance(), sharedElements, false);
+                            onLoginSuccess(getString(R.string.auth_logged_in));
                         });
                         task.addOnFailureListener(e -> {
-                            Snackbar.make(getView(), getString(R.string.auth_incorrect_login), Snackbar.LENGTH_SHORT);
+                            onLoginFailed(e.getMessage());
                         });
                     });
         }
@@ -106,17 +118,17 @@ public class LogInEmailFragment extends BaseFragment implements IOnBackPressedLi
     @OnClick(R.id.auth_email_create_account_button)
     void createAccount() {
         if (isInputValid()) {
+            showProgressDialog(getString(R.string.auth_progress_dialog_creating_account));
+
             mFirebaseAuthHandler.getFirebaseAuth()
                     .createUserWithEmailAndPassword(mEditTextEmail.getText().toString(), mEditTextPassword.getText().toString())
                     .addOnCompleteListener(task -> {
                         task.addOnSuccessListener(authResult -> {
-                            ArrayList<View> sharedElements = new ArrayList<>();
-                            sharedElements.add(ButterKnife.findById(getMainActivity(), R.id.auth_email_logo_imageview));
-
-                            mFragmentHandler.startTransactionWithFastFading(LogInFragment.newInstance(), sharedElements, false);
+                            onLoginSuccess(getString(R.string.auth_account_created));
                         });
-
-                        task.addOnFailureListener(e -> Snackbar.make(getView(), getString(R.string.auth_something_went_wrong), Snackbar.LENGTH_SHORT));
+                        task.addOnFailureListener(e -> {
+                            onLoginFailed(e.getMessage());
+                        });
                     });
         }
     }

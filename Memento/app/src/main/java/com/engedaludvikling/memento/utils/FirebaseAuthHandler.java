@@ -1,5 +1,7 @@
 package com.engedaludvikling.memento.utils;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.login.LoginManager;
@@ -11,20 +13,9 @@ public class FirebaseAuthHandler {
     private static FirebaseAuthHandler mFirebaseAuthHandler;
 
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
     private FirebaseAuthHandler() {
         mAuth = FirebaseAuth.getInstance();
-        mAuthListener = firebaseAuth -> {
-            FirebaseUser user = getCurrentUser();
-            if (user != null) {
-                // User is signed in
-                Log.d("FirebaseTag", "onAuthStateChanged:signed_in:" + user.getUid());
-            } else {
-                // User is signed out
-                Log.d("FirebaseTag", "onAuthStateChanged:signed_out");
-            }
-        };
     }
 
     public static FirebaseAuthHandler getFirebaseAuthHandler() {
@@ -49,13 +40,4 @@ public class FirebaseAuthHandler {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
     }
-
-    public void addAuthStateListener() {
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    public void removeAuthStateListener() {
-        mAuth.removeAuthStateListener(mAuthListener);
-    }
-
 }

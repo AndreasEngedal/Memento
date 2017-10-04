@@ -13,7 +13,10 @@
     <dimen name="auth_distance_between_logo_and_views">70dp</dimen>
     <dimen name="auth_email_distance_between_logo_and_views">40dp</dimen>
 
-    <!---     Font sizes     -->
+    <!-- Main Menu -->
+    <dimen name="main_menu_logo_margin_bottom">40dp</dimen>
+
+    <!--     Font sizes     -->
     <!-- Auth -->
     <dimen name="font_size_auth_buttons">16sp</dimen>
 </resources>

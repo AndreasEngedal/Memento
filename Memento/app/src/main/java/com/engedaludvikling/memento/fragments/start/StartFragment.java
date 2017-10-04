@@ -18,11 +18,6 @@ public class StartFragment extends BaseFragment {
 
     @BindView(R.id.start_logo) ImageView ivStartImage;
 
-    public static StartFragment newInstance()
-    {
-        return new StartFragment();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
